@@ -4,26 +4,11 @@ import 'package:hackathonapp/model/deprem.dart';
 import 'package:hackathonapp/provider/depremler.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final title = 'WebSocket Demo';
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: title,
-      home: ChangeNotifierProvider(
-        create: (context) => Depremler(),
-        child: HomePage(),
-      ),
-    );
-  }
-}
-
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
+  BuildContext context;
 
+  HomePage.fromnew(this.context);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -31,27 +16,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    Depremler depremler = Provider.of<Depremler>(context, listen: true);
+    Depremler depremler = Provider.of<Depremler>(context);
     return Scaffold(
-      body: Center(
-          child: StreamBuilder(
-        stream: depremler.depremler(),
-        initialData: "",
-        builder: (context, stream) {
-          if (stream.connectionState == ConnectionState.done) {
-            return Icon(
-              Icons.check_circle,
-              color: Colors.green,
-              size: 20,
-            );
-          }
-          if (stream.hasData) {
-            return DepremCounter(stream.data);
-          } else {
+      body: StreamBuilder(
+        stream: depremler.getDepremler(
+          Duration(seconds: 1),
+        ),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return DepremCounter(snapshot.data);
+          } else
             return CircularProgressIndicator();
-          }
         },
-      )),
+      ),
     );
   }
 }
@@ -63,28 +40,81 @@ class DepremCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: _deprem.result.length,
-        itemBuilder: (context, index) {
-          return AnimatedContainer(
-            duration: Duration(milliseconds: 250),
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.symmetric(vertical: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.redAccent[200],
-              // color: colors[index % colors.length],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  " ${_deprem.result[index].title} $index",
-                  style: TextStyle(color: Colors.black, fontSize: 12),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        (Container(
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          height: MediaQuery.of(context).size.height * 3 / 10,
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey.withOpacity(0.02), width: 5),
+          ),
+          child: ListView.builder(
+            itemCount: _deprem.result.length,
+            itemBuilder: (context, index) {
+              return Container(
+                  color: Colors.white,
+                  height: MediaQuery.of(context).size.height * 0.35 / 10,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  margin: EdgeInsets.symmetric(vertical: 6, horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 25),
+                        child: Text(
+                          "${_deprem.result[index].title}",
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 25),
+                        child: Text("${_deprem.result[index].mag}"),
+                      )
+                    ],
+                  ));
+            },
+          ),
+        )),
+        Container(
+          height: MediaQuery.of(context).size.height * 1.9 / 10,
+          width: MediaQuery.of(context).size.width * 9 / 10,
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(),
+                width: MediaQuery.of(context).size.width * 2.5 / 10,
+                height: MediaQuery.of(context).size.width * 2.5 / 10,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), blurRadius: 1),
+                  ],
                 ),
-              ],
-            ),
-          );
-        });
+              ),
+              Column(
+                children: [
+                  Container(
+                    child: Text("İsim Soyisim"),
+                  ),
+                  Container(
+                    child: Text("Yer Bilgisi"),
+                  )
+                ],
+              )
+            ],
+          ),
+        )
+      ],
+    );
   }
 }

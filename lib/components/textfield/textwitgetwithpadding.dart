@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TextWidgetWithPadding {
-  Padding buildTextWidgetWithPadding(
+
+  Widget buildTextWidgetWithPadding(
       String txt, double size, Color renk, FontWeight tur,
       {double padding = 0, TextAlign align}) {
     return Padding(
@@ -20,4 +20,3 @@ class TextWidgetWithPadding {
       ),
     );
   }
-}

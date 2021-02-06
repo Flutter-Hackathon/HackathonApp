@@ -3,6 +3,7 @@ import 'package:hackathonapp/components/textfield/textformfield.dart';
 import 'package:hackathonapp/components/textfield/textwitgetwithpadding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hackathonapp/screens/Signup.dart';
+import 'package:hackathonapp/screens/home.dart';
 
 class SigninScreen extends StatefulWidget {
   SigninScreen({Key key}) : super(key: key);
@@ -14,7 +15,6 @@ class SigninScreen extends StatefulWidget {
 class _SigninScreen extends State<SigninScreen> {
   var formKey = GlobalKey<FormState>();
   final auth = FirebaseAuth.instance;
-  TextWidgetWithPadding txt = TextWidgetWithPadding();
   TextFormFieldWidget txtForm = TextFormFieldWidget();
   final InputDecoration decoration = InputDecoration(
     border: OutlineInputBorder(),
@@ -30,10 +30,10 @@ class _SigninScreen extends State<SigninScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                txt.buildTextWidgetWithPadding(
+                buildTextWidgetWithPadding(
                     "Welcome!", 40, Colors.black, FontWeight.w300,
                     padding: 20),
-                txt.buildTextWidgetWithPadding("Please Sing-in to Continue", 16,
+                buildTextWidgetWithPadding("Please Sing-in to Continue", 16,
                     Colors.black, FontWeight.normal),
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
@@ -98,22 +98,27 @@ class _SigninScreen extends State<SigninScreen> {
       await auth
           .signInWithEmailAndPassword(
               email: txtForm.email, password: txtForm.password)
-          .then((_) {});
+          .then((_) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      });
     } on FirebaseAuthException catch (e) {
-      if (e.message ==
-          "The password is invalid or the user does not have a password.") {
-        _showDialog(context);
+      if (e.code == "wrong-password") {
+        _showDialog(context, "Şifreniz yanlış yeniden deneyiniz.");
+      } else if (e.code == "user-not-found") {
+        _showDialog(context, "Böyle bir kullanıcı bulunamadı.");
       }
+      print(e.code);
     }
   }
 
-  Future _showDialog(BuildContext context) {
+  Future _showDialog(BuildContext context, String message) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("My title"),
-            content: Text("This is my message."),
+            title: Text("Hata"),
+            content: Text(message),
             actions: [
               FlatButton(
                 child: Text("OK"),

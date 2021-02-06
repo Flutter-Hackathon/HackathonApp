@@ -16,7 +16,6 @@ class _SignupScreen extends State<SignupScreen> {
   var formKey = GlobalKey<FormState>();
   final auth = FirebaseAuth.instance;
   final store = FirebaseDatabase.instance.reference();
-  TextWidgetWithPadding txt = TextWidgetWithPadding();
   TextFormFieldWidget txtForm = TextFormFieldWidget();
   final InputDecoration decoration = InputDecoration(
     border: OutlineInputBorder(),
@@ -30,10 +29,10 @@ class _SignupScreen extends State<SignupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            txt.buildTextWidgetWithPadding(
+            buildTextWidgetWithPadding(
                 "Welcome!", 40, Colors.black, FontWeight.w300,
                 padding: 20),
-            txt.buildTextWidgetWithPadding("Please Sing-in to Continue", 16,
+            buildTextWidgetWithPadding("Please Sing-in to Continue", 16,
                 Colors.black, FontWeight.normal),
             Padding(
               padding: const EdgeInsets.only(top: 30),

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathonapp/provider/depremler.dart';
 import 'package:hackathonapp/screens/Homepage.dart';
+import 'package:hackathonapp/screens/NavBar.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       create: (context) => Depremler(),
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: NavBar(),
       ),
     );
   }

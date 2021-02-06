@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 class Depremler with ChangeNotifier {
   Deprem _deprem;
   DepremService _depremService = DepremService();
-  String elma = "Elma";
   get deprem => _deprem;
   set deprem(Deprem deprem) {
     _deprem = deprem;

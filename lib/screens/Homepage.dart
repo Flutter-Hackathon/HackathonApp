@@ -1,14 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hackathonapp/components/card/lostpersoncard.dart';
+import 'package:hackathonapp/components/card/member.dart';
+import 'package:hackathonapp/components/textfield/textwitgetwithpadding.dart';
 import 'package:hackathonapp/model/deprem.dart';
 import 'package:hackathonapp/provider/depremler.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
-  BuildContext context;
+  const HomePage({Key key}) : super(key: key);
 
-  HomePage.fromnew(this.context);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -58,7 +60,7 @@ class DepremCounter extends StatelessWidget {
                   color: Colors.white,
                   height: MediaQuery.of(context).size.height * 0.35 / 10,
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  margin: EdgeInsets.symmetric(vertical: 6, horizontal: 5),
+                  margin: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -78,41 +80,24 @@ class DepremCounter extends StatelessWidget {
             },
           ),
         )),
-        Container(
-          height: MediaQuery.of(context).size.height * 1.9 / 10,
-          width: MediaQuery.of(context).size.width * 9 / 10,
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(),
-                width: MediaQuery.of(context).size.width * 2.5 / 10,
-                height: MediaQuery.of(context).size.width * 2.5 / 10,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), blurRadius: 1),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    child: Text("İsim Soyisim"),
-                  ),
-                  Container(
-                    child: Text("Yer Bilgisi"),
-                  )
-                ],
-              )
-            ],
-          ),
+        buildTextWidgetWithPadding(
+            "Yakınların", 20, Colors.black, FontWeight.bold,
+            padding: 5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            memberCard("Onur", context),
+            memberCard("Taha", context),
+            memberCard("Orhun", context),
+          ],
+        ),
+        buildTextWidgetWithPadding(
+            "Son Kayıp İlanı", 20, Colors.black, FontWeight.bold,
+            padding: 25),
+        Padding(
+          padding: const EdgeInsets.only(top: 25.0),
+          child: buildLostCard(context),
         )
       ],
     );

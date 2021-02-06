@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hackathonapp/screens/Group.dart';
+import 'package:hackathonapp/screens/Homepage.dart';
 import 'package:hackathonapp/screens/MainPage.dart';
 import 'package:hackathonapp/screens/Profile.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+class NavBar extends StatefulWidget {
+  NavBar({Key key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _NavBarState createState() => _NavBarState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    MainPage(),
+  static const List<Widget> _pages = <Widget>[
+    HomePage(),
     GroupPage(),
     ProfilePage()
   ];
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        body: _widgetOptions.elementAt(_selectedIndex),
+        body: _pages.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(

@@ -3,7 +3,7 @@ import 'package:hackathonapp/components/textfield/textformfield.dart';
 import 'package:hackathonapp/components/textfield/textwitgetwithpadding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hackathonapp/screens/Signup.dart';
-import 'package:hackathonapp/screens/home.dart';
+import 'package:hackathonapp/screens/NavBar.dart';
 
 class SigninScreen extends StatefulWidget {
   SigninScreen({Key key}) : super(key: key);
@@ -100,7 +100,7 @@ class _SigninScreen extends State<SigninScreen> {
               email: txtForm.email, password: txtForm.password)
           .then((_) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+            context, MaterialPageRoute(builder: (context) => NavBar()));
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == "wrong-password") {

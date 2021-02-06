@@ -18,13 +18,6 @@ class TextFormFieldWidget {
           color: Colors.grey,
           fontSize: 20.0,
         ),
-        suffixIcon: labelText == "Password"
-            ? FlatButton(
-                onPressed: () {},
-                child: Text("Forgot Password ?"),
-                textColor: Colors.blue,
-              )
-            : null,
       ),
       obscureText: labelText == "Password" ? _isHidden : false,
       keyboardType: keyboardType(labelText),

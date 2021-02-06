@@ -73,17 +73,21 @@ class _SignupScreen extends State<SignupScreen> {
       child: RaisedButton(
         onPressed: () {
           if (formKey.currentState.validate()) {
-            auth
-                .createUserWithEmailAndPassword(
-                    email: txtForm.email, password: txtForm.password)
-                .then((_) {
-              store.child('users/' + auth.currentUser.uid).set({
-                'name': txtForm.name,
-                'phone': txtForm.phone,
+            try {
+              auth
+                  .createUserWithEmailAndPassword(
+                      email: txtForm.email, password: txtForm.password)
+                  .then((_) {
+                store.child('users').child(auth.currentUser.uid).set({
+                  'name': txtForm.name,
+                  'phone': txtForm.phone,
+                });
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SigninScreen()));
               });
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SigninScreen()));
-            });
+            } on FirebaseAuthException catch (e) {
+              print(e.message);
+            }
           } else {
             setState(() {});
           }

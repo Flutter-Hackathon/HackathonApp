@@ -78,12 +78,7 @@ class _SigninScreen extends State<SigninScreen> {
       child: RaisedButton(
         onPressed: () {
           if (formKey.currentState.validate()) {
-            auth
-                .signInWithEmailAndPassword(
-                    email: txtForm.email, password: txtForm.password)
-                .then((_) {
-              print("sadasd");
-            });
+            signIn();
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => WelcomeScreen()));
           } else {
@@ -96,6 +91,39 @@ class _SigninScreen extends State<SigninScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
     );
+  }
+
+  Future<void> signIn() async {
+    try {
+      await auth
+          .signInWithEmailAndPassword(
+              email: txtForm.email, password: txtForm.password)
+          .then((_) {});
+    } on FirebaseAuthException catch (e) {
+      if (e.message ==
+          "The password is invalid or the user does not have a password.") {
+        _showDialog(context);
+      }
+    }
+  }
+
+  Future _showDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("My title"),
+            content: Text("This is my message."),
+            actions: [
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 
   ButtonTheme buildSingupButtonButton(String btntxt) {
